@@ -13,7 +13,7 @@ texts_neg = fr.read_files('test', 'neg') + fr.read_files('train', 'neg')
 
 
 def construct_graph_and_run_pagerank_algorithm(texts):
-    regex = r'[a-z]+\b'
+    regex = r"[a-z]+['[a-z]+]?\b"  # stop words included
     words = []
     for text in texts:
         words += re.findall(regex, text)
@@ -25,8 +25,9 @@ def construct_graph_and_run_pagerank_algorithm(texts):
     for i in range(l):
         hash_index[all_words[i]] = i
 
-    matrix = np.zeros((l, l), dtype=np.float32)
+    matrix = np.zeros((l, l), dtype=np.float32)  # working with float32 to save space.
 
+    # adds nodes to graph: constructing a symmetric matrix due to undirected property of our graph
     def add_to_matrix(word1, word2):
         m = hash_index[word1]
         n = hash_index[word2]
